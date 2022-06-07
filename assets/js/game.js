@@ -62,6 +62,50 @@ var fight = function (enemyName) {
     }
 };
 
+var shop = function () {
+    // ask player what they'd like to do
+    var shopOptionPrompt = window.prompt(
+        "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+    );
+
+    //carry out action
+    switch (shopOptionPrompt) {
+        case "REFILL":
+        case "refill":
+            if (playerMoney >= 7) {
+                window.alert("Refilling player's health by 20 for 7 dollars.");
+                // make transaction
+                playerHealth = playerHealth + 20;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+            break;
+        case "UPGRADE":
+        case "upgrade":
+            if (playerMoney >= 7) {
+                window.alert("Upgrading player's attack by 6 for 7 dollars.");
+                // make transactiona
+                playerAttack = playerAttack + 6;
+                playerMoney = playerMoney - 7;
+            }
+            else {
+                window.alert("You don't have enough money!");
+            }
+            break;
+        case "LEAVE":
+        case "leave":
+            window.alert("Leaving the store.");
+            // do nothing
+            break;
+        default:
+            window.alert("You did not pick a valid option. Try again.");
+            shop();
+            break;
+    }
+};
+
 var startGame = function () {
     // reset player stats
     playerHealth = 100;
@@ -76,20 +120,28 @@ var startGame = function () {
             // reset enemyhealth before new fight
             enemyHealth = 50;
             fight(pickedEnemyName);
+            //go to shop if still alive and between enemies
+            if (playerHealth > 0 && i < enemyNames.length - 1) {
+                // ask if player wants to use the store before the next round
+                var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+                if (storeConfirm) {
+                    shop();
+                }
+            }
         } else {
             window.alert("You have lost your robot in battle! Game Over!");
             break;
         }
     }
-    
+
     endGame();
 };
 
-var endGame = function() {
+var endGame = function () {
     // if player iss till alive, player wins!
-    if (playerHealth > 0 ) {
+    if (playerHealth > 0) {
         window.alert("Great job, you've survived the game! You now have a score of " + playerMoney + ".");
-    } 
+    }
     else {
         window.alert("You've lost your robot in battle.");
     }
