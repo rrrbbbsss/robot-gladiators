@@ -10,8 +10,12 @@ var playerAttack = 10;
 var playerMoney = 10;
 
 var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
-var enemyHealth = 50;
 var enemyAttack = 12;
+
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min) ;
+    return value;
+}
 
 var fight = function (enemyName) {
     while (enemyHealth > 0 && enemyHealth > 0) {
@@ -25,14 +29,15 @@ var fight = function (enemyName) {
             if (confirmSkip) {
                 window.alert(playerName + " has decided to skip this fight. Goodby!");
                 // remove money from player for skipping
-                playerMoney = playerMoney - 10;
+                playerMoney = Math.max(0,playerMoney - 10);
                 console.log("playerMoney", playerMoney);
                 break;
             }
         }
 
         // player attacks the enemy
-        enemyHealth = enemyHealth - playerAttack;
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+        enemyHealth = Math.max(0, enemyHealth - damage);
         console.log(playerName + " attacked " + enemyName + ".  " + enemyName + " now has " + enemyHealth + " health remaning.");
         // check enemy's health
         if (enemyHealth <= 0) {
@@ -46,7 +51,8 @@ var fight = function (enemyName) {
         }
 
         // enemy attacks the player
-        playerHealth = playerHealth - enemyAttack;
+        var damage = randomNumber(enemyAttack - 3, enemyAttack);
+        playerHealth = Math.max(0, playerHealth - damage);
         // log to validate
         console.log(enemyName + " attacked " + playerName + ".  " + playerName + " now has " + playerHealth + " health remaning.");
         // check players's health
@@ -118,7 +124,7 @@ var startGame = function () {
             window.alert("Welcome to Robot Gladiators! Round " + (i + 1));
             var pickedEnemyName = enemyNames[i];
             // reset enemyhealth before new fight
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
             fight(pickedEnemyName);
             //go to shop if still alive and between enemies
             if (playerHealth > 0 && i < enemyNames.length - 1) {
