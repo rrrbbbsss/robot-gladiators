@@ -7,24 +7,38 @@
 var randomNumber = function (min, max) {
     var value = Math.floor(Math.random() * (max - min + 1) + min);
     return value;
-}
+};
+
+var fightOrSkip = function () {
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+    if (!promptFight) {
+        window.alert("You need provide a valid answer! Please trya gain.");
+        return fightOrSkip();
+    }
+
+    promptFight = promptFight.toLowerCase();
+    if (promptFight === "skip") {
+        //confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+        // if yes, leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // take money from player for skipping
+            playerInfo.money = playerInfo.money - 10;
+            return true;
+        }
+    }
+    return false;
+};
 
 var fight = function (enemy) {
-    while (enemy.health > 0 && enemy.health > 0) {
+    while (playerInfo.health > 0 && enemy.health > 0) {
         // prompt for fight
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-            // if yes, leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodby!");
-                // remove money from player for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
+        //var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
+        if (fightOrSkip()) {
+            // leave fight if skip
+            break;
         }
 
         // player attacks the enemy
@@ -137,7 +151,7 @@ var endGame = function () {
     }
 };
 
-var getPlayerName = function() {
+var getPlayerName = function () {
     var name = "";
     while (name === "" || name === null) {
         name = prompt("What is your robot's name?");
